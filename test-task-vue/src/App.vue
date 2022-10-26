@@ -85,10 +85,6 @@ export default {
   },
   data() {
     return {
-      form: {
-        source: [],
-        keywords: '',
-      },
       cards: {
         kwork: [],
         freelance: [],
