@@ -12,9 +12,7 @@ class FreelanceService {
 
   static async removeById(id) {
     try {
-      /* const data = (await axios.delete(`/api/freelancehabr/${id}`)).data; */
-      const data = (await axios.delete(`/api/freelancehabr}`)).data;
-      console.log(id);
+      const data = (await axios.delete(`/api/freelancehabr/${id}`)).data;
       return data;
     } catch (err) {
       throw Error(err);
