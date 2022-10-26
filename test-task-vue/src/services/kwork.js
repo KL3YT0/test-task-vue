@@ -6,7 +6,7 @@ class KworkService {
       const data = (await axios.patch(`/api/kworkservice/${id}`, card)).data;
       return data;
     } catch (err) {
-      console.log(err);
+      throw Error(err);
     }
   }
 
@@ -15,7 +15,7 @@ class KworkService {
       const data = (await axios.delete(`/api/kworkservice/${id}/`)).data;
       return data;
     } catch (err) {
-      console.log(err);
+      throw Error(err);
     }
   }
 }

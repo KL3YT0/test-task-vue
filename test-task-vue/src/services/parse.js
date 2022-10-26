@@ -6,7 +6,7 @@ class ParseService {
       const data = (await axios.post(`/parser-config/`, body)).data;
       return data;
     } catch (err) {
-      console.log(err);
+      throw Error(err);
     }
   }
 
@@ -21,7 +21,7 @@ class ParseService {
       ).data;
       return data;
     } catch (err) {
-      console.log(err);
+      throw Error(err);
     }
   }
 
@@ -30,7 +30,7 @@ class ParseService {
       const data = (await axios.get(`/parser-config/`)).data;
       return data;
     } catch (err) {
-      console.log(err);
+      throw Error(err);
     }
   }
 }

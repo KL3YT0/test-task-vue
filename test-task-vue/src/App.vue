@@ -106,13 +106,18 @@ export default {
         hash_parsource: date.toString(),
       };
 
-      this.inProcess = true;
-      const data = await ParseService.createRequest(body);
-      this.inProcess = false;
+      try {
+        this.inProcess = true;
+        const data = await ParseService.createRequest(body);
 
-      this.cards.kwork = data.kwork_result;
-      this.cards.freelance = data.freelancehabr_result;
-      this.hashParsource = data.hash_parsource;
+        this.cards.kwork = data.kwork_result;
+        this.cards.freelance = data.freelancehabr_result;
+        this.hashParsource = data.hash_parsource;
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.inProcess = false;
+      }
     },
 
     async getParseDataByHashParsource() {
@@ -120,14 +125,18 @@ export default {
         this.inProcess = true;
       }
 
-      const data = await ParseService.getDataByHashParsource(
-        this.hashParsource
-      );
+      try {
+        const data = await ParseService.getDataByHashParsource(
+          this.hashParsource
+        );
 
-      this.cards.kwork = data[0].kwork_result;
-      this.cards.freelance = data[0].freelancehabr_result;
-
-      this.inProcess = false;
+        this.cards.kwork = data[0].kwork_result;
+        this.cards.freelance = data[0].freelancehabr_result;
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.inProcess = false;
+      }
     },
 
     /* async getAllParseData() {
@@ -136,28 +145,50 @@ export default {
 
     async updateFreelanceCard(card) {
       const { article, id, title, keyword, url } = card;
-      this.inProcess = true;
-      await FreelanceService.update({ article, title, keyword, url }, id);
-      this.getParseDataByHashParsource();
+
+      try {
+        this.inProcess = true;
+        await FreelanceService.update({ article, title, keyword, url }, id);
+        this.getParseDataByHashParsource();
+      } catch (err) {
+        console.log(err);
+        this.inProcess = false;
+      }
     },
 
     async removeFreelanceCard(id) {
-      await FreelanceService.removeById(id);
-      this.inProcess = true;
-      this.getParseDataByHashParsource();
+      try {
+        this.inProcess = true;
+        await FreelanceService.removeById(id);
+        this.getParseDataByHashParsource();
+      } catch (err) {
+        console.log(err);
+        this.inProcess = false;
+      }
     },
 
     async updateKworkCard(card) {
       const { article, id, title, keyword, url } = card;
-      await KworkService.update({ article, title, keyword, url }, id);
-      this.inProcess = true;
-      this.getParseDataByHashParsource();
+
+      try {
+        await KworkService.update({ article, title, keyword, url }, id);
+        this.inProcess = true;
+        this.getParseDataByHashParsource();
+      } catch (err) {
+        console.log(err);
+        this.inProcess = false;
+      }
     },
 
     async removeKworkCard(id) {
-      this.inProcess = true;
-      await KworkService.removeById(id);
-      this.getParseDataByHashParsource();
+      try {
+        this.inProcess = true;
+        await KworkService.removeById(id);
+        this.getParseDataByHashParsource();
+      } catch (err) {
+        console.log(err);
+        this.inProcess = false;
+      }
     },
   },
 };
