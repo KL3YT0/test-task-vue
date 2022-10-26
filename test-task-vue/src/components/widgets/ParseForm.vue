@@ -68,10 +68,6 @@ export default {
       this.form.keywords.splice(idx, 1);
     },
 
-    addKeyword(value) {
-      this.form.keywords.push(value);
-    },
-
     updateKeyword(value) {
       this.keyword = value;
     },
