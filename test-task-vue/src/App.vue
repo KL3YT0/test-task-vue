@@ -16,7 +16,7 @@
           <div
             v-if="cards.kwork.length"
             :class="
-              cards.freelance.length ? 'card-list_both' : '.card-list_single'
+              cards.freelance.length ? 'card-list_both' : 'card-list_single'
             "
           >
             <div class="caption">Kwork:</div>
@@ -40,7 +40,7 @@
 
           <div
             v-if="cards.freelance.length"
-            :class="cards.kwork.length ? 'card-list_both' : '.card-list_single'"
+            :class="cards.kwork.length ? 'card-list_both' : 'card-list_single'"
           >
             <div class="caption">Freelance:</div>
             <card-list>

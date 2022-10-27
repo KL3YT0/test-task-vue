@@ -13,7 +13,7 @@ export default {
 <style lang="scss" scoped>
 .list {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   gap: 10px;
 }
