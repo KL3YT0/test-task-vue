@@ -103,6 +103,11 @@ export default {
     },
 
     switchEditMode() {
+      if (this.editMode === true) {
+        this.titleEdit = this.title;
+        this.articleEdit = this.article;
+      }
+
       this.editMode = !this.editMode;
     },
   },
