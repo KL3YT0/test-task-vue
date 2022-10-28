@@ -6,13 +6,13 @@
         <ParseForm @apply="createParseRequest" />
 
         <BaseButton
-          @click="refreshData"
+          @click="getParseDataByHashParsource"
           label="Обновить"
           :disabled="!hashParsource"
           class="refresh-btn"
         />
 
-        <div v-if="!inProcess" class="card-lists">
+        <div class="card-lists">
           <div
             v-if="cards.kwork.length"
             :class="
@@ -56,13 +56,13 @@
             </card-list>
           </div>
         </div>
-
-        <div v-else class="loader">Загрузка данных...</div>
       </div>
     </main>
   </div>
 </template>
 <script>
+import NProgress from 'nprogress';
+
 import ParseService from '@/services/parse';
 import KworkService from '@/services/kwork';
 import FreelanceService from '@/services/freelance';
@@ -91,8 +91,6 @@ export default {
       },
 
       hashParsource: '',
-
-      inProcess: false,
     };
   },
   methods: {
@@ -107,7 +105,8 @@ export default {
       };
 
       try {
-        this.inProcess = true;
+        NProgress.start();
+
         const data = await ParseService.createRequest(body);
 
         this.cards.kwork = data.kwork_result;
@@ -116,12 +115,16 @@ export default {
       } catch (err) {
         console.log(err);
       } finally {
-        this.inProcess = false;
+        NProgress.done();
       }
     },
 
     async getParseDataByHashParsource() {
       try {
+        if (!NProgress.isStarted()) {
+          NProgress.start();
+        }
+
         const data = await ParseService.getDataByHashParsource(
           this.hashParsource
         );
@@ -131,19 +134,15 @@ export default {
       } catch (err) {
         console.log(err);
       } finally {
-        this.inProcess = false;
+        NProgress.done();
       }
-    },
-
-    refreshData() {
-      this.inProcess = true;
-      this.getParseDataByHashParsource();
     },
 
     async updateFreelanceCard(card) {
       const { article, id, title, keyword, url } = card;
 
       try {
+        NProgress.start();
         const updated = await FreelanceService.update(
           { article, title, keyword, url },
           id
@@ -156,18 +155,17 @@ export default {
       } catch (err) {
         console.log(err);
       } finally {
-        //
+        NProgress.done();
       }
     },
 
     async removeFreelanceCard(id) {
       try {
-        this.inProcess = true;
+        NProgress.start();
         await FreelanceService.removeById(id);
         this.getParseDataByHashParsource();
       } catch (err) {
         console.log(err);
-        this.inProcess = false;
       }
     },
 
@@ -175,6 +173,7 @@ export default {
       const { article, id, title, keyword, url } = card;
 
       try {
+        NProgress.start();
         const updated = await KworkService.update(
           { article, title, keyword, url },
           id
@@ -185,18 +184,17 @@ export default {
       } catch (err) {
         console.log(err);
       } finally {
-        //
+        NProgress.done();
       }
     },
 
     async removeKworkCard(id) {
       try {
-        this.inProcess = true;
+        NProgress.start();
         await KworkService.removeById(id);
         this.getParseDataByHashParsource();
       } catch (err) {
         console.log(err);
-        this.inProcess = false;
       }
     },
   },
@@ -208,6 +206,10 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 30px 0px;
+}
+
+main {
+  margin-top: 40px;
 }
 
 .container {

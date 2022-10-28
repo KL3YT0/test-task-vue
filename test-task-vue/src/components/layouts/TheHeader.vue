@@ -7,6 +7,7 @@
 <style lang="scss" scoped>
 header {
   display: flex;
+  position: fixed;
   align-items: center;
   justify-content: center;
   width: 100%;
