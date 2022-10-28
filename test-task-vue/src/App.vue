@@ -6,7 +6,7 @@
         <ParseForm @apply="createParseRequest" />
 
         <BaseButton
-          @click="getParseDataByHashParsource"
+          @click="refreshData"
           label="Обновить"
           :disabled="!hashParsource"
           class="refresh-btn"
@@ -81,7 +81,7 @@ export default {
     BaseButton,
   },
   mounted() {
-    /* this.getAllParseData(); */
+    //
   },
   data() {
     return {
@@ -121,10 +121,6 @@ export default {
     },
 
     async getParseDataByHashParsource() {
-      if (this.inProcess === false) {
-        this.inProcess = true;
-      }
-
       try {
         const data = await ParseService.getDataByHashParsource(
           this.hashParsource
@@ -139,20 +135,28 @@ export default {
       }
     },
 
-    /* async getAllParseData() {
-      const data = await ParseService.getAllData();
-    }, */
+    refreshData() {
+      this.inProcess = true;
+      this.getParseDataByHashParsource();
+    },
 
     async updateFreelanceCard(card) {
       const { article, id, title, keyword, url } = card;
 
       try {
-        this.inProcess = true;
-        await FreelanceService.update({ article, title, keyword, url }, id);
-        this.getParseDataByHashParsource();
+        const updated = await FreelanceService.update(
+          { article, title, keyword, url },
+          id
+        );
+
+        const cardIndex = this.cards.freelance.findIndex(
+          (card) => card.id === id
+        );
+        this.cards.freelance[cardIndex] = updated;
       } catch (err) {
         console.log(err);
-        this.inProcess = false;
+      } finally {
+        //
       }
     },
 
@@ -171,12 +175,17 @@ export default {
       const { article, id, title, keyword, url } = card;
 
       try {
-        await KworkService.update({ article, title, keyword, url }, id);
-        this.inProcess = true;
-        this.getParseDataByHashParsource();
+        const updated = await KworkService.update(
+          { article, title, keyword, url },
+          id
+        );
+
+        const cardIndex = this.cards.kwork.findIndex((card) => card.id === id);
+        this.cards.kwork[cardIndex] = updated;
       } catch (err) {
         console.log(err);
-        this.inProcess = false;
+      } finally {
+        //
       }
     },
 
